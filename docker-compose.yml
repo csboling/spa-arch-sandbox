@@ -20,7 +20,7 @@ services:
     volumes:
       - ./frontend/dist:/usr/share/nginx/html
   frontend_dev:
-    build: ./frontend
+    build: ./images/js-base
     container_name: dev
     environment:
       VIRTUAL_HOST: dev.local
@@ -29,3 +29,16 @@ services:
       - /www/node_modules
     expose:
       - 3000
+
+  db:
+    build: ./db
+    container_name: db
+    expose:
+      - 3306
+    volumes:
+      - /var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d
+      - ./db/sequelize:/sequelize
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    command: mysqld --lower-case-table-names=1
