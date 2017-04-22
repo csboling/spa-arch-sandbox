@@ -20,7 +20,7 @@ services:
 
   # app
   app_revproxy:
-    image: nginx:alpine
+    build: ./app/network
     networks:
       - front
       - api
@@ -28,11 +28,21 @@ services:
       VIRTUAL_HOST: app.local
       DEPLOYMENT_TIER: development
     volumes:
-      - ./app/nginx.conf:/etc/nginx/nginx.conf
+      - ./app/network/nginxconf.py:/nginxconf.py
     expose:
       - 80
+  app_production:
+    image: nginx:alpine
+    networks:
+      - front
+    expose:
+      - 80
+      - 443
+    volumes:
+      - ./app/dist:/usr/share/nginx/html
   app_development:
     build: ./images/js-base
+    container_name: app_dev
     networks:
       - front
     volumes:

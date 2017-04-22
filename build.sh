@@ -1,2 +1,2 @@
 docker-compose up -d
-docker exec -it dev bash -c 'yarn install && yarn run compile'
+docker exec -it app_dev bash -c 'yarn install && yarn run compile'
