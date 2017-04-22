@@ -1,38 +1,62 @@
 version: '3'
+
+networks:
+  front:
+  api:
+  storage:
+
 services:
   gateway:
-    build: ./gateway
-    container_name: gateway
+    image: jwilder/nginx-proxy:alpine
     ports:
-      - 4321:80
+      - "${EXTERNAL_PORT}:80"
+    networks:
+      - default
+      - front
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
     environment:
-      DEFAULT_HOST: dev.local
+      DEFAULT_HOST: app.local
 
-  static:
+  # app
+  app_revproxy:
     image: nginx:alpine
+    networks:
+      - front
+      - api
     environment:
-      VIRTUAL_HOST: static.local
+      VIRTUAL_HOST: app.local
+      DEPLOYMENT_TIER: development
+    volumes:
+      - ./app/nginx.conf:/etc/nginx/nginx.conf
     expose:
       - 80
-      - 443
-    volumes:
-      - ./frontend/dist:/usr/share/nginx/html
-  frontend_dev:
+  app_development:
     build: ./images/js-base
-    container_name: dev
-    environment:
-      VIRTUAL_HOST: dev.local
+    networks:
+      - front
     volumes:
-      - ./frontend:/www
+      - ./app:/www
       - /www/node_modules
     expose:
       - 3000
 
+  api:
+    networks:
+      - api
+      - storage
+    image: python:alpine
+    volumes:
+      - ./api:/www
+    working_dir: /www
+    command: python -m http.server 80
+    expose:
+      - 80
   db:
     build: ./db
     container_name: db
+    networks:
+      - storage
     expose:
       - 3306
     volumes:
