@@ -35,7 +35,7 @@ http {
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
             location /api {
-                rewrite ^/api(.*)$ /$1 break;
+                rewrite ^/api/(.*)$ /$1 break;
                 proxy_pass http://api;
             }
         }

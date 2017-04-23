@@ -3,7 +3,6 @@ version: '3'
 networks:
   front:
   api:
-  storage:
 
 services:
   gateway:
@@ -52,21 +51,38 @@ services:
       - 3000
 
   api:
+    image: nginx:alpine
     networks:
       - api
-      - storage
-    image: python:alpine
     volumes:
-      - ./api:/www
-    working_dir: /www
-    command: python -m http.server 80
+      - ./api/network/nginx.conf:/etc/nginx/nginx.conf
     expose:
       - 80
+  api_python:
+    build: ./images/py-base
+    volumes:
+      - ./api/python:/src
+    expose:
+      - 5000
+    networks:
+      - api
+    environment:
+      MODULENAME: api
+  api_node:
+    build: ./images/js-base
+    networks:
+      - api
+    volumes:
+      - ./api/node:/www
+    working_dir: /www
+    expose:
+      - 80
+
   db:
     build: ./db
     container_name: db
     networks:
-      - storage
+      - api
     expose:
       - 3306
     volumes:
