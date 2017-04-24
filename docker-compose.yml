@@ -30,6 +30,8 @@ services:
       - ./app/network/nginxconf.py:/nginxconf.py
     expose:
       - 80
+    depends_on:
+      - app_development
   app_production:
     image: nginx:alpine
     networks:
@@ -59,6 +61,9 @@ services:
       - ./api/network/nginx.conf:/etc/nginx/nginx.conf
     expose:
       - 80
+    depends_on:
+      - api_python
+      - api_node
   api_python:
     build: ./images/py-base
     volumes:
@@ -81,7 +86,7 @@ services:
     expose:
       - 51966
   db:
-    build: ./db
+    image: mysql:5.6
     container_name: db
     networks:
       - api
@@ -90,7 +95,6 @@ services:
     volumes:
       - /var/lib/mysql
       - ./db/init:/docker-entrypoint-initdb.d
-      - ./db/sequelize:/sequelize
     environment:
       MYSQL_ROOT_PASSWORD: root
     command: mysqld --lower-case-table-names=1

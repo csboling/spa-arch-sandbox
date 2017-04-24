@@ -1,6 +1,0 @@
-db:
-  dialect: mysql
-  host: db
-  database: proofofconcept
-  username: root
-  password: root
