@@ -5,31 +5,19 @@ networks:
   api:
 
 services:
-  gateway:
-    image: jwilder/nginx-proxy:alpine
-    ports:
-      - "${EXTERNAL_PORT}:80"
-    networks:
-      - default
-      - front
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    environment:
-      DEFAULT_HOST: app.local
-
   # app
   app_revproxy:
     build: ./app/network
     networks:
+      - default
       - front
       - api
     environment:
-      VIRTUAL_HOST: app.local
       DEPLOYMENT_TIER: development
     volumes:
       - ./app/network/nginxconf.py:/nginxconf.py
-    expose:
-      - 80
+    ports:
+      - "${EXTERNAL_PORT}:80"
     depends_on:
       - app_development
   app_production:

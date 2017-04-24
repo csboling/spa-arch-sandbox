@@ -25,7 +25,6 @@ http {
 
     server {
         listen 80;
-        server_name app.local;
         port_in_redirect off;
 
         location / {
