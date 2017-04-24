@@ -50,6 +50,7 @@ services:
     expose:
       - 3000
 
+  # api fragments
   api:
     image: nginx:alpine
     networks:
@@ -75,9 +76,10 @@ services:
     volumes:
       - ./api/node:/www
     working_dir: /www
+    environment:
+      API_PORT: 51966
     expose:
-      - 80
-
+      - 51966
   db:
     build: ./db
     container_name: db

@@ -1,0 +1,25 @@
+{
+  "name": "sandbox-node-api",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "better-npm-run start"
+  },
+  "betterScripts": {
+    "start": {
+      "command": "node bin/server.js",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    }
+  },
+  "dependencies": {
+    "config": "^1.25.1",
+    "jsonapi-server": "^2.3.2",
+    "jsonapi-store-relationaldb": "^1.2.8",
+    "mysql": "^2.13.0",
+    "sequelize": "^3.30.4"
+  },
+  "devDependencies": {
+    "better-npm-run": "^0.0.15"
+  }
+}
