@@ -13,6 +13,15 @@ module.exports = {
       }
     });
 
-    store.populate();
+    (function attemptConnection() {
+      store.sequelize.sync()
+        .catch(() => {
+          console.log('db connection failed, retrying in 3s . . .');
+          setTimeout(attemptConnection, 3000);
+        })
+        .then(() => {
+          store.populate();
+        });
+    })();
   }
 };
