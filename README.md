@@ -18,5 +18,5 @@ At `/api/todos` you can access a Python endpoint with some in-memory
 storage of JSON objects. At `/api/tasks` you can find a Node endpoint
 which
 uses [jsonapi-server](https://github.com/holidayextras/jsonapi-server)
-to provide a [{json:api}](https://jsonapi.org) compliant endpoint
+to provide a [{json:api}](http://jsonapi.org) compliant endpoint
 backed by MySQL via Sequelize.
